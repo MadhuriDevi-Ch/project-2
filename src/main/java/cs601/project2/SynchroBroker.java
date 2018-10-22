@@ -21,7 +21,6 @@ public class SynchroBroker implements Broker<Object> {
 		// TODO Auto-generated method stub
 		execTime = System.currentTimeMillis() - execTime;
 		pubCount++;
-		
 		if (pubCount == 2) {
 			System.out.println("Time taken is : " + execTime);
 		}
@@ -33,10 +32,19 @@ public class SynchroBroker implements Broker<Object> {
 		// TODO Auto-generated method stub
 		// call onevent method in subscriber interface
 		if (subscribersList.isEmpty()) {
+			System.out.println("Wait for subscribers to initialize");
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (subscribersList.isEmpty()) {
 			System.out.println("No subscribers");
 			return;
 		} else {
-			// for each subcriber in subcribersList call the onEvent function with jobj as
+			// for each subscriber in subcribersList call the onEvent function with jobj as
 			// the argument.
 			for (Subscriber<Object> sub : subscribersList) {
 				sub.onEvent(jobj);
@@ -54,7 +62,6 @@ public class SynchroBroker implements Broker<Object> {
 
 	@Override
 	public void shutdown() {
-		// TODO Auto-generated method stub
 		this.timer();
 	}
 

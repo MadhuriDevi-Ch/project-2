@@ -32,6 +32,7 @@ public class BlockingQueueImpl<T>  {
 	        if(size < capacity) {
 	        	size++;
 	        }
+	        notifyAll();
 	    }
 
 	    public synchronized T take() {
@@ -54,7 +55,7 @@ public class BlockingQueueImpl<T>  {
 	    	// wait for time duration if items is empty
 	    	if(size == 0) {
 	    		try {
-					Thread.sleep(duration);
+					wait(duration);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

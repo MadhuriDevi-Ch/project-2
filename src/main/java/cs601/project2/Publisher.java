@@ -13,13 +13,13 @@ import com.google.gson.JsonParser;
 
 public class Publisher extends Thread {
 	private String fileName;
-	private Broker synB;
+	private Broker broker;
 //	private int unixTime;
 	
-	public Publisher(String inputFile, Broker synB) {
+	public Publisher(String inputFile, Broker broker) {
 		// TODO Auto-generated constructor stub
 		this.fileName = inputFile;
-		this.synB = synB;
+		this.broker = broker;
 	}
 
 	public void run() {
@@ -34,7 +34,7 @@ public class Publisher extends Thread {
 
 					JsonElement element = reviews.parse(reviewLine);
 					JsonObject object = element.getAsJsonObject();
-					synB.publish(object);
+					broker.publish(object);
 					count++;
 				} catch (JsonParseException e) {
 					System.out.println("there is an error in the record");
@@ -44,7 +44,7 @@ public class Publisher extends Thread {
 			System.out.println("Published: " + count);
 
 		} catch (Exception e) {
-			// System.out.println(e);
+			//System.out.println(e);
 			System.out.println("error in the line ");
 
 		}

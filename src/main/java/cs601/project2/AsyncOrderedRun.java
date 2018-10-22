@@ -18,12 +18,6 @@ public class AsyncOrderedRun extends Thread {
 	public void run() {
 		// for each subcriber in subcribersList call the onEvent function with jobj as
 		// the argument.
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		Object obj;
 		while (true) {
 			obj = queue.poll(3000);

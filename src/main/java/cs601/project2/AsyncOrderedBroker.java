@@ -43,14 +43,13 @@ public class AsyncOrderedBroker implements Broker<Object> {
 	@Override
 	public void shutdown() {
 		// TODO Auto-generated method stub
-		this.timer();
 		try {
 			runningClass.join();
-			System.out.println("Time taken: " + System.currentTimeMillis());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Didn't shutdown properly");
 		}
+		this.timer();
 		return;
 	}
 

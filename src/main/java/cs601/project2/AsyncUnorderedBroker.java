@@ -42,22 +42,30 @@ public class AsyncUnorderedBroker implements Broker<Object> {
 	@Override
 	public void shutdown() {
 		// TODO Auto-generated method stub
-		this.timer();
 		pool.shutdown();
 		try {
 		  pool.awaitTermination(30, TimeUnit.NANOSECONDS);
 		} catch (InterruptedException e) {
 		  System.out.println("Failed to shutdown properly");
 		}
-		
+		this.timer();
 	}
 
 	@Override
 	public void publish(Object obj) {
 		// TODO Auto-generated method stub
+		/*
+		if (subscribersList.isEmpty()) {
+			System.out.println("Wait for subscribers to initialize");
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}*/
 		Runnable r1 = new AsyncUnorderedRun(subscribersList, obj); 
 		pool.execute(r1);
-		
 	}
 
 }

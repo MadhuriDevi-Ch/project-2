@@ -25,33 +25,37 @@ public class ImplementationClass {
 		Broker broker = null;
 		String[] inputArray = null ,outputArray = null;
 		
-		try (BufferedReader configReader = Files.newBufferedReader(Paths.get("ConfigFile.json"),
+		System.out.println("Config File: \n" + args[0]);
+		try (BufferedReader configReader = Files.newBufferedReader(Paths.get(args[0]),
 				Charset.forName("ISO-8859-1"))) {
 
 			String initialLine;
 			while ((initialLine = configReader.readLine()) != null) {
 				try {
-
+					System.out.println(initialLine);
 					JsonElement element = intial.parse(initialLine);
 					JsonObject object = element.getAsJsonObject();
 					JsonElement brokerElement = object.get("BrokerType");
 					brokerImplement = brokerElement.getAsString();
+					System.out.println("Running Broker: " + brokerImplement);
 					JsonElement insizeElement = object.get("No.of Input Files");
 					JsonElement outsizeElement = object.get("No.of Output Files");
 					inputArray = new String[insizeElement.getAsInt()];
 					
+					System.out.println("Input Files:");
 					for(int i=0; i<inputArray.length;i++) {
 						int j=i+1;
 						JsonElement inputElement = object.get("InputFile"+j);
 						inputArray[i] = inputElement.getAsString();
-						
+						System.out.println("\t" + inputArray[i]);
 					}
 					outputArray = new String[outsizeElement.getAsInt()];
+					System.out.println("Output Files:");
 					for(int i=0; i<outputArray.length;i++) {
 						int j=i+1;
 						JsonElement outputElement = object.get("OutputFile"+j);
 						outputArray[i] = outputElement.getAsString();
-						
+						System.out.println("\t" + outputArray[i]);
 					}
 				
 
@@ -89,15 +93,16 @@ public class ImplementationClass {
 		
 		Thread pub1 = new Publisher(inputArray[0], broker);
 		Thread pub2 = new Publisher(inputArray[1], broker);
+		SortingSubscriber newSubscriber = new SortingSubscriber(broker, 1, outputArray[0]);
+		SortingSubscriber oldSubscriber = new SortingSubscriber(broker, 0, outputArray[1]);
+		System.out.println("Subscribers Initialized");
 		pub1.start();
 		pub2.start();
 		System.out.println("Publishers running");
-		SortingSubscriber newSubscriber = new SortingSubscriber(broker, 1);
-		SortingSubscriber oldSubscriber = new SortingSubscriber(broker, 0);
-		System.out.println("Subscribers Initialized");
 		pub1.join();
 		pub2.join();
+		System.out.println("Sent all objects to Subcribers");
 		broker.shutdown();
-		System.out.print("Sent all objects to Subcribers");
+		System.out.println("Received all objects by Subcribers");
 	}
 }
