@@ -5,21 +5,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class AsycUnorderedBroker implements Broker<Object> {
+public class AsyncUnorderedBroker implements Broker<Object> {
 
 	private ExecutorService pool;
 	private ArrayList<Subscriber<Object>> subscribersList;
+	private int pubCount;
+	private long execTime;
 	
-	public AsycUnorderedBroker() {
+	public AsyncUnorderedBroker() {
 		// TODO Auto-generated constructor stub
 		pool = Executors.newFixedThreadPool(100); 
 		this.subscribersList = new ArrayList<Subscriber<Object>>();
+		this.execTime = 0;
+		this.pubCount = 0;
 	}
 
 	@Override
 	public void timer() {
 		// TODO Auto-generated method stub
+		execTime = System.currentTimeMillis() - execTime;
+		pubCount++;
 		
+		if (pubCount == 2) {
+			System.out.println("Time taken is : " + execTime);
+		}
 	}
 
 
@@ -33,6 +42,7 @@ public class AsycUnorderedBroker implements Broker<Object> {
 	@Override
 	public void shutdown() {
 		// TODO Auto-generated method stub
+		this.timer();
 		pool.shutdown();
 		try {
 		  pool.awaitTermination(30, TimeUnit.NANOSECONDS);

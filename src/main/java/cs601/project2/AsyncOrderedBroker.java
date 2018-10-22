@@ -6,6 +6,8 @@ public class AsyncOrderedBroker implements Broker<Object> {
 	private BlockingQueueImpl<Object> orderedQueue;
 	Thread runningClass;
 	private ArrayList<Subscriber<Object>> subscribersList;
+	private int pubCount;
+	private long execTime;
 
 	public AsyncOrderedBroker() {
 		// TODO Auto-generated constructor stub
@@ -16,12 +18,19 @@ public class AsyncOrderedBroker implements Broker<Object> {
 		this.runningClass = new AsyncOrderedRun(orderedQueue, subscribersList);
 //		runningClass = new AsyncOrderedRun(orderedQueue, timer);
 		runningClass.start();
+		this.execTime = 0;
+		this.pubCount = 0;
 	}
 
 	@Override
 	public void timer() {
 		// TODO Auto-generated method stub
-
+		execTime = System.currentTimeMillis() - execTime;
+		pubCount++;
+		
+		if (pubCount == 2) {
+			System.out.println("Time taken is : " + execTime);
+		}
 	}
 
 	@Override
@@ -34,6 +43,7 @@ public class AsyncOrderedBroker implements Broker<Object> {
 	@Override
 	public void shutdown() {
 		// TODO Auto-generated method stub
+		this.timer();
 		try {
 			runningClass.join();
 			System.out.println("Time taken: " + System.currentTimeMillis());

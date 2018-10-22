@@ -55,7 +55,7 @@ public class SynchroBroker implements Broker<Object> {
 	@Override
 	public void shutdown() {
 		// TODO Auto-generated method stub
-		
+		this.timer();
 	}
 
 }

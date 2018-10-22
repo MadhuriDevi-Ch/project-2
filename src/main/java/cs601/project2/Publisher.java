@@ -34,16 +34,13 @@ public class Publisher extends Thread {
 
 					JsonElement element = reviews.parse(reviewLine);
 					JsonObject object = element.getAsJsonObject();
-//					JsonElement timeElement = object.get("unixReviewTime");
-//					unixTime = timeElement.getAsInt();
-//					System.out.println(fileName);
 					synB.publish(object);
 					count++;
 				} catch (JsonParseException e) {
 					System.out.println("there is an error in the record");
 				}
 			}
-			synB.timer();
+			
 			System.out.println("Published: " + count);
 
 		} catch (Exception e) {
