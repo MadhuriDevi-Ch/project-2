@@ -1,0 +1,1 @@
+{"BrokerType": "AsynchroOrderedBroker", "No.of Input Files": "2", "InputFile1": "reviews_Apps_for_Android_5.json", "InputFile2": "reviews_Home_and_Kitchen_5.json", "No.of Output Files": "2", "OutputFile1": "newrecords.txt", "OutputFile2": "oldrecords.txt"}
